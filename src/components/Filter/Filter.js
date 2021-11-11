@@ -1,8 +1,14 @@
 import React from "react";
 import s from './filter.module.scss'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import * as actions from '../../redux/contacts/actions'
 
-export default function Filter ({handleChange, filter=''}) {
+function Filter ({filter, setFilter}) {
+
+    const handleChange = (e) => {
+        setFilter( e.target.value )
+    }
 
     return (
         <label className={s.label}>
@@ -22,6 +28,20 @@ export default function Filter ({handleChange, filter=''}) {
 }
 
 Filter.propTypes = {
-    handleChange: PropTypes.func,
+    setFilter: PropTypes.func,
     filter: PropTypes.string,
 } 
+
+const mapStateToProps = state => {
+  return {
+    filter: state.contacts.filter
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setFilter: (filterString) => dispatch(actions.setFilter(filterString))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

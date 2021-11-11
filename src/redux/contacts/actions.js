@@ -1,9 +1,22 @@
-const addContact = {
-    type: 'contacts/add',
-    payload: {}
-}
+import { v4 as uuid } from 'uuid';
 
-const deleteContact = {
+const addContact = (name, number) => ({
+    type: 'contacts/add',
+    payload: {
+        id: uuid(),
+        name,
+        number
+    }
+})
+
+const deleteContact = (id) => ({
     type: 'contacts/delete',
-    payload: {}
-}
+    payload: id
+})
+
+const setFilter = (filter) => ({
+    type: 'filter/set',
+    payload: {filter}
+})
+
+export {addContact, deleteContact, setFilter}

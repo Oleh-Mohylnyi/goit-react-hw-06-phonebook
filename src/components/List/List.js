@@ -2,10 +2,21 @@ import React, {useEffect, useState} from "react"
 import ListItem from "../ListItem/ListItem"
 import s from './list.module.scss'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import * as actions from '../../redux/contacts/actions'
 
-export default function List({filtredContacts, deleteContact}) {
+function List({contactsItems, filter, deleteContact}) {
     const [editCheckbox, setEditCheckbox] = useState(false)
-    
+
+    const doFilter = () => {
+        if (contactsItems.length !== 0) {
+            return contactsItems.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()))
+        }
+    }
+
+    const filtredContacts = doFilter()
+
+console.log(filtredContacts);
     useEffect(() => {
         if (filtredContacts.length === 0) {
         setEditCheckbox(false)
@@ -24,29 +35,26 @@ export default function List({filtredContacts, deleteContact}) {
 
     return (
         <div className={s.contactsList}>
-            {filtredContacts.length > 0
-                && (<label className={classNameCheckbox}>
-                        Edit
-                        <input
-                            type="checkbox"
-                            className={s.hidden}
-                            checked={editCheckbox}
-                            onChange={() => setEditCheckbox(!editCheckbox)}
-                        />
-                    </label>)
-            }    
+            <label className={classNameCheckbox}>
+                Edit
+                <input
+                    type="checkbox"
+                    className={s.hidden}
+                    checked={editCheckbox}
+                    onChange={() => setEditCheckbox(!editCheckbox)}
+                />
+            </label>
             <ul className={s.list}>
-                {filtredContacts.map(contact =>
-                    <ListItem
+                {filtredContacts !== 0 &&
+                    filtredContacts.map(contact =>
+                        <ListItem
                         key={contact.id}
                         contact={contact}
                         backgroundColorItem={backgroundColorItem(contact)}
-                        filtredContacts={filtredContacts}
-                        changeCheckbox={setEditCheckbox}
                         statusCheckbox={editCheckbox}
                         deleteContact={deleteContact}
                     />
-                    )}
+                )}
             </ul>
         </div>
     )
@@ -54,5 +62,19 @@ export default function List({filtredContacts, deleteContact}) {
 
 List.propTypes = {
     deleteContact: PropTypes.func,
-    filtredContacts: PropTypes.array
+    contactsItems: PropTypes.array,
+    filter: PropTypes.string
+}
+    
+const mapStateToProps = state => {
+  return {
+      contactsItems: state.contacts.items,
+      filter: state.contacts.filter
     }
+};
+
+const mapDispatchToProps = dispatch => ({
+    deleteContact: (id) => dispatch(actions.deleteContact(id)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

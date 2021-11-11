@@ -1,11 +1,18 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import s from './form.module.scss'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import * as actions from '../../redux/contacts/actions'
 
-export default function Form({ saveForm }) {
+function Form({ contactsItems, addContact }) {
     
     const [name, setName] = useState('')
-    const [number, setNumber] = useState ('')
+    const [number, setNumber] = useState('')
+    
+    useEffect(() => {
+        localStorage.setItem('phonebookContacts', JSON.stringify(contactsItems))
+    }, [contactsItems]
+    )
     
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -22,6 +29,30 @@ export default function Form({ saveForm }) {
         saveForm(name, number)
         setName('')
         setNumber('')
+    }
+
+    const saveForm = (name, number) => {
+    
+        const regNumber = /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/
+        const regName = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/
+
+        if (contactsItems.find(contact => contact.name.toLowerCase() === name.toLowerCase())) {
+            alert(`${name} is already in contacts`)
+        } else {
+            if (name === '' || number === '') {
+                alert("Do not save contact without a name or number")
+            } else {
+                if (!regName.test(name)) {
+                    alert("Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п.")
+              } else {
+                if (!regNumber.test(number)) {
+                    alert("Номер телефона должен состоять из цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +")
+                } else {
+                    addContact(name, number)
+                }
+              }
+            }
+        }
     }
 
     return (
@@ -67,5 +98,19 @@ export default function Form({ saveForm }) {
 }
 
 Form.propTypes = {
-    saveForm: PropTypes.func
+    addContact: PropTypes.func,
+    contactsItems: PropTypes.array
 }
+
+const mapStateToProps = state => {
+  return {
+    contactsItems: state.contacts.items,
+    filter: state.contacts.filter
+    }
+};
+
+const mapDispatchToProps = dispatch => ({
+    addContact: (name, number) => dispatch(actions.addContact(name, number)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
