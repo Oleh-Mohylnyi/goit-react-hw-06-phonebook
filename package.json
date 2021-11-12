@@ -6,6 +6,7 @@
   "homepage": "https://Oleh-Mohylnyi.github.io/goit-react-hw-06-phonebook",
   "author": "",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -20,6 +21,7 @@
     "redux": "^4.1.2",
     "redux-devtools": "^3.7.0",
     "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"
   },

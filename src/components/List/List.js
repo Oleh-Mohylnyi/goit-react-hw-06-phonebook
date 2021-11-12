@@ -3,7 +3,7 @@ import ListItem from "../ListItem/ListItem"
 import s from './list.module.scss'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import * as actions from '../../redux/contacts/actions'
+import actions from '../../redux/contacts/actions'
 
 function List({contactsItems, filter, deleteContact}) {
     const [editCheckbox, setEditCheckbox] = useState(false)
@@ -16,7 +16,6 @@ function List({contactsItems, filter, deleteContact}) {
 
     const filtredContacts = doFilter()
 
-console.log(filtredContacts);
     useEffect(() => {
         if (filtredContacts.length === 0) {
         setEditCheckbox(false)

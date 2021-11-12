@@ -2,7 +2,7 @@ import React from "react";
 import s from './filter.module.scss'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import * as actions from '../../redux/contacts/actions'
+import actions from '../../redux/contacts/actions'
 
 function Filter ({filter, setFilter}) {
 

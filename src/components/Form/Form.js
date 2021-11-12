@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import s from './form.module.scss'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import * as actions from '../../redux/contacts/actions'
+import actions from '../../redux/contacts/actions'
 
 function Form({ contactsItems, addContact }) {
     
