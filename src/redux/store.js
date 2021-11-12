@@ -5,22 +5,42 @@ import contactsReducer from './contacts/reducers';
 
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
+import {
+    persistReducer,
+    persistStore,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
+const contctsPersistConfig = {
+  key: 'phonebook',
+    storage,
+    blacklist: ['filter']
+}
 
-// const rootReducer = combineReducers({
-//     contacts: contactsReducer
-// })
-
-// const store = createStore(rootReducer, composeWithDevTools());
-
-const middleware = [...getDefaultMiddleware(), logger]
+const middleware = [...getDefaultMiddleware({
+    serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+    }
+}), logger];
 
 const store = configureStore({
     reducer: {
-        contacts: contactsReducer
+        contacts: persistReducer(contctsPersistConfig, contactsReducer)
     },
     middleware,
     // devTools: process.env.MODE.ENV === 'development'
-})
+});
 
-export default store;
+const persistor = persistStore(store);
+
+// const store = createStore(rootReducer, composeWithDevTools());
+
+const storeForExport = { store, persistor };
+
+export default storeForExport;

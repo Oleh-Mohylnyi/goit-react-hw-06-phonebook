@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react"
-import s from './form.module.scss'
-import PropTypes from 'prop-types'
+// import React, { useEffect } from "react";
+import React, { useState } from "react";
+import s from './form.module.scss';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import actions from '../../redux/contacts/actions'
+import actions from '../../redux/contacts/actions';
 
 function Form({ contactsItems, addContact }) {
     
-    const [name, setName] = useState('')
-    const [number, setNumber] = useState('')
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
     
-    useEffect(() => {
-        localStorage.setItem('phonebookContacts', JSON.stringify(contactsItems))
-    }, [contactsItems]
-    )
+    // useEffect(() => {
+    //     localStorage.setItem('phonebookContacts', JSON.stringify(contactsItems))
+    // }, [contactsItems]
+    // )
     
     const handleChange = (e) => {
         const { name, value } = e.target
